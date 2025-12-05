@@ -1,0 +1,918 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Civil Aviation Authority of Sri Lanka</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Open Sans', 'sans-serif'],
+          },
+          colors: {
+            border: "hsl(214.3 31.8% 91.4%)",
+            input: "hsl(214.3 31.8% 91.4%)",
+            ring: "hsl(200 100% 40%)",
+            background: "hsl(0 0% 100%)",
+            foreground: "hsl(215 20% 20%)",
+            primary: {
+              DEFAULT: "hsl(200 100% 40%)",
+              foreground: "hsl(0 0% 100%)",
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body { font-family: 'Open Sans', sans-serif; }
+    .scrollbar-hide::-webkit-scrollbar { display: none; }
+    .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+    [x-cloak] { display: none !important; }
+    .dropdown-container { position: relative; }
+    .dropdown-list {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      max-height: 200px;
+      overflow-y: auto;
+      background: white;
+      border: 1px solid #e5e7eb;
+      border-radius: 0.375rem;
+      box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+      z-index: 50;
+    }
+    .dropdown-item {
+      padding: 0.5rem 0.75rem;
+      cursor: pointer;
+      transition: background-color 0.15s;
+    }
+    .dropdown-item:hover {
+      background-color: #f3f4f6;
+    }
+    .dropdown-item.selected {
+      background-color: #dbeafe;
+      color: #1d4ed8;
+    }
+  </style>
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+</head>
+<body class="min-h-screen flex flex-col bg-white font-sans text-gray-900">
+
+  <!-- Header -->
+  <header class="bg-white py-3 px-4 md:px-8 border-b border-gray-100 sticky top-0 z-50 md:static">
+    <div class="container mx-auto flex justify-between items-center">
+      <div class="flex items-center gap-3 md:gap-4 w-full">
+        <a href="/" class="flex items-center gap-3 md:gap-4 hover:opacity-90 transition-opacity w-full">
+          <!-- Use local image or placeholder -->
+          <img src="attached_assets/logo-civil-aviation-authority-logo_1764932472985.png"
+               alt="Civil Aviation Authority Logo" 
+               class="h-10 w-10 md:h-16 md:w-16 object-contain shrink-0">
+          <div class="flex flex-col md:block justify-center">
+            <h1 class="text-base md:text-3xl font-normal text-gray-900 tracking-tight leading-tight md:leading-normal">
+              Civil Aviation Authority <span class="font-light whitespace-nowrap">of Sri Lanka</span>
+            </h1>
+          </div>
+        </a>
+      </div>
+      
+      <div class="hidden md:flex gap-3 text-sm font-medium shrink-0 ml-4">
+        <a href="#" class="text-blue-600 hover:underline">සිංහල</a>
+        <span class="text-gray-300">|</span>
+        <a href="#" class="text-blue-600 hover:underline">தமிழ்</a>
+        <span class="text-gray-300">|</span>
+        <a href="#" class="text-gray-900 font-bold underline decoration-2 underline-offset-4">English</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Navigation -->
+  <nav class="bg-[hsl(200,100%,40%)] text-white shadow-md relative z-40" x-data="{ mobileMenuOpen: false }">
+    <div class="container mx-auto px-4 md:px-8">
+      
+      <!-- Desktop Menu -->
+      <ul class="hidden md:flex flex-wrap">
+        <li>
+          <a href="/home" class="block px-6 py-4 text-base font-medium transition-colors duration-200 hover:bg-[hsl(200,100%,35%)]">Home</a>
+        </li>
+        <li>
+          <a href="/licenses" class="block px-6 py-4 text-base font-medium transition-colors duration-200 hover:bg-[hsl(200,100%,35%)]">Personal Licenses</a>
+        </li>
+        <li>
+          <a href="/log-flight" class="block px-6 py-4 text-base font-medium transition-colors duration-200 hover:bg-[hsl(200,100%,35%)]">Log a flight</a>
+        </li>
+        <li>
+          <!-- Active Item -->
+          <a href="/registration" class="block px-6 py-4 text-base font-medium transition-colors duration-200 bg-[hsl(205,100%,30%)]">Pilot Registration</a>
+        </li>
+      </ul>
+
+      <!-- Mobile Menu Bar -->
+      <div class="md:hidden flex items-center justify-between py-3">
+        <span class="font-medium text-sm uppercase tracking-wider opacity-90">Menu</span>
+        <button @click="mobileMenuOpen = true" class="text-white hover:bg-white/20 p-2 rounded-md">
+          <i data-lucide="menu" class="h-6 w-6"></i>
+        </button>
+      </div>
+
+      <!-- Mobile Drawer -->
+      <div x-show="mobileMenuOpen" 
+           style="display: none;"
+           class="fixed inset-0 z-50 flex justify-end"
+           role="dialog" aria-modal="true">
+        
+        <!-- Backdrop -->
+        <div x-show="mobileMenuOpen" 
+             x-transition:enter="transition-opacity ease-out duration-300"
+             x-transition:enter-start="opacity-0"
+             x-transition:enter-end="opacity-100"
+             x-transition:leave="transition-opacity ease-in duration-200"
+             x-transition:leave-start="opacity-100"
+             x-transition:leave-end="opacity-0"
+             class="fixed inset-0 bg-black/80" 
+             @click="mobileMenuOpen = false"></div>
+        
+        <!-- Panel -->
+        <div x-show="mobileMenuOpen"
+             x-transition:enter="transition ease-in-out duration-300 transform"
+             x-transition:enter-start="translate-x-full"
+             x-transition:enter-end="translate-x-0"
+             x-transition:leave="transition ease-in-out duration-300 transform"
+             x-transition:leave-start="translate-x-0"
+             x-transition:leave-end="translate-x-full"
+             class="relative w-[300px] sm:w-[400px] bg-white h-full shadow-xl flex flex-col">
+          
+          <div class="bg-[hsl(200,100%,40%)] p-6 text-white relative">
+            <button @click="mobileMenuOpen = false" class="absolute right-4 top-4 text-white/70 hover:text-white">
+              <i data-lucide="x" class="h-6 w-6"></i>
+            </button>
+            <h2 class="text-xl font-semibold mb-1">Civil Aviation Authority</h2>
+            <p class="text-blue-100 text-sm opacity-90">of Sri Lanka</p>
+          </div>
+
+          <div class="flex flex-col gap-2 px-4 py-4">
+            <a href="/home" class="px-4 py-3 text-base font-medium rounded-xl transition-all duration-200 flex items-center text-gray-700 hover:bg-gray-50 hover:pl-6">
+              Home
+            </a>
+            <a href="/licenses" class="px-4 py-3 text-base font-medium rounded-xl transition-all duration-200 flex items-center text-gray-700 hover:bg-gray-50 hover:pl-6">
+              Personal Licenses
+            </a>
+            <a href="/log-flight" class="px-4 py-3 text-base font-medium rounded-xl transition-all duration-200 flex items-center text-gray-700 hover:bg-gray-50 hover:pl-6">
+              Log a flight
+            </a>
+            <!-- Active Mobile Item -->
+            <a href="/registration" class="px-4 py-3 text-base font-medium rounded-xl transition-all duration-200 flex items-center text-[hsl(200,100%,40%)] bg-blue-50 ring-1 ring-blue-100 shadow-sm">
+              Pilot Registration
+            </a>
+          </div>
+
+          <div class="mt-auto p-6 border-t border-gray-100">
+            <p class="text-sm font-medium text-gray-500 mb-3">Language</p>
+            <div class="flex gap-4 text-sm">
+              <a href="#" class="text-blue-600 hover:underline">සිංහල</a>
+              <a href="#" class="text-blue-600 hover:underline">தமிழ்</a>
+              <a href="#" class="text-gray-900 font-bold">English</a>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Breadcrumbs -->
+  <nav class="bg-white py-3 border-b border-gray-100 overflow-hidden">
+    <div class="container mx-auto px-4 md:px-8">
+      <div class="flex items-center text-sm text-gray-600 overflow-x-auto whitespace-nowrap pb-1 md:pb-0 -mb-1 scrollbar-hide">
+        <span class="mr-2 font-medium text-gray-500 shrink-0">You are here:</span>
+        <ol class="flex items-center">
+          <li class="flex items-center">
+            <a href="/home" class="hover:text-[hsl(200,100%,40%)] hover:underline transition-colors">Home</a>
+          </li>
+          <li class="flex items-center">
+            <span class="mx-2 text-gray-400 text-xs">»</span>
+            <a href="/licenses" class="hover:text-[hsl(200,100%,40%)] hover:underline transition-colors">Personnel Licences</a>
+          </li>
+          <li class="flex items-center">
+            <span class="mx-2 text-gray-400 text-xs">»</span>
+            <span class="text-gray-800 font-medium">Pilot Registration</span>
+          </li>
+        </ol>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="flex-1 w-full">
+    <div class="bg-gray-50/50 min-h-[600px] py-12">
+      <div class="container mx-auto px-4 md:px-8">
+        <div class="max-w-3xl mx-auto">
+          
+          <!-- Content Container -->
+          <div class="bg-white rounded-lg border border-gray-200 shadow-sm p-6 md:p-8" x-data="registrationForm()">
+            
+            <!-- Form Header -->
+            <div class="text-center mb-8">
+              <div class="p-3 rounded-full bg-blue-50 inline-block mb-4">
+                <i data-lucide="plane" class="h-8 w-8 text-[hsl(200,100%,40%)]"></i>
+              </div>
+              <h2 class="text-2xl font-semibold text-gray-900 mb-2">Drone Pilot Registration</h2>
+              <p class="text-gray-500">Complete all fields to register as a drone pilot</p>
+            </div>
+
+            <!-- Success Message -->
+            <div x-show="submitSuccess" x-cloak class="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg">
+              <div class="flex items-center gap-3">
+                <i data-lucide="check-circle" class="h-5 w-5 text-green-600"></i>
+                <p class="text-green-800 font-medium">Registration submitted successfully!</p>
+              </div>
+            </div>
+
+            <!-- Error Message -->
+            <div x-show="submitError" x-cloak class="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
+              <div class="flex items-center gap-3">
+                <i data-lucide="alert-circle" class="h-5 w-5 text-red-600"></i>
+                <p class="text-red-800 font-medium" x-text="submitError"></p>
+              </div>
+            </div>
+
+            <!-- Registration Form -->
+            <form @submit.prevent="submitForm" class="space-y-6">
+              
+              <!-- Personal Information Section -->
+              <div class="border-b border-gray-200 pb-6">
+                <h3 class="text-lg font-medium text-gray-900 mb-4">Personal Information</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  
+                  <!-- Full Name -->
+                  <div class="md:col-span-2">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Full Name <span class="text-red-500">*</span></label>
+                    <input type="text" x-model="formData.fullName" required
+                           class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[hsl(200,100%,40%)] focus:border-transparent"
+                           placeholder="Enter your full name">
+                  </div>
+
+                  <!-- National ID / Passport -->
+                  <div class="md:col-span-2">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">National ID / Passport No <span class="text-red-500">*</span></label>
+                    <input type="text" x-model="formData.nationalId" required
+                           class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[hsl(200,100%,40%)] focus:border-transparent"
+                           placeholder="Enter your National ID or Passport number">
+                  </div>
+                </div>
+              </div>
+
+              <!-- Address Section -->
+              <div class="border-b border-gray-200 pb-6">
+                <h3 class="text-lg font-medium text-gray-900 mb-4">Address Information</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  
+                  <!-- Country -->
+                  <div class="dropdown-container">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Country <span class="text-red-500">*</span></label>
+                    <div class="relative">
+                      <input type="text" x-model="countrySearch" @focus="showCountryDropdown = true" @input="filterCountries()" required
+                             :value="formData.country ? formData.country : countrySearch"
+                             @blur="setTimeout(() => showCountryDropdown = false, 200)"
+                             class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[hsl(200,100%,40%)] focus:border-transparent"
+                             placeholder="Search country...">
+                      <div x-show="showCountryDropdown && filteredCountries.length > 0" class="dropdown-list">
+                        <template x-for="country in filteredCountries" :key="country.iso2">
+                          <div class="dropdown-item" :class="{'selected': formData.countryCode === country.iso2}"
+                               @click="selectCountry(country)">
+                            <span x-text="country.name"></span>
+                          </div>
+                        </template>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- State/Province -->
+                  <div class="dropdown-container">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">State/Province <span class="text-red-500">*</span></label>
+                    <div class="relative">
+                      <input type="text" x-model="stateSearch" @focus="showStateDropdown = true" @input="filterStates()" 
+                             :disabled="!formData.countryCode" required
+                             :value="formData.state ? formData.state : stateSearch"
+                             @blur="setTimeout(() => showStateDropdown = false, 200)"
+                             class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[hsl(200,100%,40%)] focus:border-transparent disabled:bg-gray-100"
+                             :placeholder="formData.countryCode ? 'Search state/province...' : 'Select country first'">
+                      <div x-show="showStateDropdown && filteredStates.length > 0" class="dropdown-list">
+                        <template x-for="state in filteredStates" :key="state.iso2">
+                          <div class="dropdown-item" :class="{'selected': formData.stateCode === state.iso2}"
+                               @click="selectState(state)">
+                            <span x-text="state.name"></span>
+                          </div>
+                        </template>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Town/City -->
+                  <div class="dropdown-container">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Town/City <span class="text-red-500">*</span></label>
+                    <div class="relative">
+                      <input type="text" x-model="citySearch" @focus="showCityDropdown = true" @input="filterCities()" 
+                             :disabled="!formData.stateCode" required
+                             :value="formData.city ? formData.city : citySearch"
+                             @blur="setTimeout(() => showCityDropdown = false, 200)"
+                             class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[hsl(200,100%,40%)] focus:border-transparent disabled:bg-gray-100"
+                             :placeholder="formData.stateCode ? 'Search town/city...' : 'Select state first'">
+                      <div x-show="showCityDropdown && filteredCities.length > 0" class="dropdown-list">
+                        <template x-for="city in filteredCities" :key="city.id">
+                          <div class="dropdown-item" :class="{'selected': formData.city === city.name}"
+                               @click="selectCity(city)">
+                            <span x-text="city.name"></span>
+                          </div>
+                        </template>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Suburb -->
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Suburb</label>
+                    <input type="text" x-model="formData.suburb"
+                           class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[hsl(200,100%,40%)] focus:border-transparent"
+                           placeholder="Enter suburb">
+                  </div>
+
+                  <!-- Street Name -->
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Street Name <span class="text-red-500">*</span></label>
+                    <input type="text" x-model="formData.streetName" required
+                           class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[hsl(200,100%,40%)] focus:border-transparent"
+                           placeholder="Enter street name">
+                  </div>
+
+                  <!-- ZIP Code -->
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">ZIP/Postal Code <span class="text-red-500">*</span></label>
+                    <input type="text" x-model="formData.zipCode" required
+                           class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[hsl(200,100%,40%)] focus:border-transparent"
+                           placeholder="Enter ZIP code">
+                  </div>
+
+                  <!-- Address Number -->
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Address Number <span class="text-red-500">*</span></label>
+                    <input type="text" x-model="formData.addressNumber" required
+                           class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[hsl(200,100%,40%)] focus:border-transparent"
+                           placeholder="Enter address number">
+                  </div>
+                </div>
+              </div>
+
+              <!-- Contact Section -->
+              <div class="border-b border-gray-200 pb-6">
+                <h3 class="text-lg font-medium text-gray-900 mb-4">Contact Information</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  
+                  <!-- Contact Number -->
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Contact Number <span class="text-red-500">*</span></label>
+                    <input type="tel" x-model="formData.contactNo" required
+                           class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[hsl(200,100%,40%)] focus:border-transparent"
+                           placeholder="Enter contact number">
+                  </div>
+
+                  <!-- Emergency Number -->
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Emergency Number <span class="text-red-500">*</span></label>
+                    <input type="tel" x-model="formData.emergencyNo" required
+                           class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[hsl(200,100%,40%)] focus:border-transparent"
+                           placeholder="Enter emergency number">
+                  </div>
+
+                  <!-- Email -->
+                  <div class="md:col-span-2">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Email <span class="text-red-500">*</span></label>
+                    <input type="email" x-model="formData.email" required
+                           class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[hsl(200,100%,40%)] focus:border-transparent"
+                           placeholder="Enter email address">
+                  </div>
+                </div>
+              </div>
+
+              <!-- Drone Information Section -->
+              <div class="border-b border-gray-200 pb-6">
+                <h3 class="text-lg font-medium text-gray-900 mb-4">Drone Information</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  
+                  <!-- Drone Brand -->
+                  <div class="dropdown-container">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Drone Brand <span class="text-red-500">*</span></label>
+                    <div class="relative">
+                      <input type="text" x-model="brandSearch" @focus="showBrandDropdown = true" @input="filterBrands()" required
+                             :value="formData.droneBrand ? formData.droneBrand : brandSearch"
+                             @blur="setTimeout(() => showBrandDropdown = false, 200)"
+                             class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[hsl(200,100%,40%)] focus:border-transparent"
+                             placeholder="Search drone brand...">
+                      <div x-show="showBrandDropdown && filteredBrands.length > 0" class="dropdown-list">
+                        <template x-for="brand in filteredBrands" :key="brand">
+                          <div class="dropdown-item" :class="{'selected': formData.droneBrand === brand}"
+                               @click="selectBrand(brand)">
+                            <span x-text="brand"></span>
+                          </div>
+                        </template>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Model -->
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Model <span class="text-red-500">*</span></label>
+                    <input type="text" x-model="formData.model" required
+                           class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[hsl(200,100%,40%)] focus:border-transparent"
+                           placeholder="Enter drone model">
+                  </div>
+
+                  <!-- Serial Number -->
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Serial Number <span class="text-red-500">*</span></label>
+                    <input type="text" x-model="formData.serialNo" required
+                           class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[hsl(200,100%,40%)] focus:border-transparent"
+                           placeholder="Enter serial number">
+                  </div>
+
+                  <!-- Operation -->
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Operation <span class="text-red-500">*</span></label>
+                    <select x-model="formData.operation" required
+                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[hsl(200,100%,40%)] focus:border-transparent">
+                      <option value="">Select operation type</option>
+                      <option value="Leisure">Leisure</option>
+                      <option value="Commercial">Commercial</option>
+                      <option value="Agricultural">Agricultural</option>
+                      <option value="Surveying">Surveying</option>
+                      <option value="Photography">Photography</option>
+                      <option value="Inspection">Inspection</option>
+                      <option value="Other">Other</option>
+                    </select>
+                  </div>
+
+                  <!-- Purpose -->
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Purpose <span class="text-red-500">*</span></label>
+                    <select x-model="formData.purpose" required
+                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[hsl(200,100%,40%)] focus:border-transparent">
+                      <option value="">Select purpose</option>
+                      <option value="Personal Use">Personal Use</option>
+                      <option value="Business">Business</option>
+                      <option value="Research">Research</option>
+                      <option value="Training">Training</option>
+                      <option value="Emergency Services">Emergency Services</option>
+                      <option value="Other">Other</option>
+                    </select>
+                  </div>
+
+                  <!-- Purpose Description -->
+                  <div class="md:col-span-2">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Purpose Description</label>
+                    <textarea x-model="formData.purposeDescription" rows="3"
+                              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[hsl(200,100%,40%)] focus:border-transparent"
+                              placeholder="Describe the purpose of drone usage in detail..."></textarea>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Submit Button -->
+              <div class="pt-4">
+                <button type="submit" :disabled="isSubmitting"
+                        class="w-full bg-[hsl(200,100%,40%)] text-white py-3 px-6 rounded-md font-medium hover:bg-[hsl(200,100%,35%)] transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2">
+                  <span x-show="!isSubmitting">Submit Registration</span>
+                  <span x-show="isSubmitting" class="flex items-center gap-2">
+                    <svg class="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                      <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                      <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    Submitting...
+                  </span>
+                </button>
+              </div>
+            </form>
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-gray-50 border-t border-gray-200 py-8 mt-auto">
+    <div class="container mx-auto px-4 text-center text-gray-500 text-sm">
+      <p>&copy; <script>document.write(new Date().getFullYear())</script> Civil Aviation Authority of Sri Lanka. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    lucide.createIcons();
+
+    function registrationForm() {
+      return {
+        formData: {
+          fullName: '',
+          nationalId: '',
+          country: '',
+          countryCode: '',
+          state: '',
+          stateCode: '',
+          city: '',
+          suburb: '',
+          streetName: '',
+          zipCode: '',
+          addressNumber: '',
+          contactNo: '',
+          emergencyNo: '',
+          email: '',
+          droneBrand: '',
+          model: '',
+          serialNo: '',
+          operation: '',
+          purpose: '',
+          purposeDescription: '',
+          adminStatus: 'Pending'
+        },
+        
+        countries: [],
+        states: [],
+        cities: [],
+        
+        filteredCountries: [],
+        filteredStates: [],
+        filteredCities: [],
+        filteredBrands: [],
+        
+        countrySearch: '',
+        stateSearch: '',
+        citySearch: '',
+        brandSearch: '',
+        
+        showCountryDropdown: false,
+        showStateDropdown: false,
+        showCityDropdown: false,
+        showBrandDropdown: false,
+        
+        isSubmitting: false,
+        submitSuccess: false,
+        submitError: '',
+        
+        droneBrands: [
+          "DJI", "SZ DJI Technology", "3DR", "Walkera", "Eachine", "Holy Stone", 
+          "Hubsan", "JJRC", "MMC", "Multirotor", "Parrot", "Sensefly", "SJRC", 
+          "Xiaomi", "Yuneec", "ZLRC", "C-Fly Intelligent Technology", 
+          "Makerfire Technology", "MJX R/C", "Beijing TT Aviation Technology", 
+          "Suzhou EAVISION Robotic Technologies", "Guangzhou Xaircraft Technology", 
+          "Autel Robotics", "Ruko", "Fimi Technology", "SwellPro", "Other Brand", 
+          "4DRC", "Kfplan", "Wingtra", "Vertical Technologies", "DEERC", "LYZRC", 
+          "Airobotics", "Wltoys", "Pulsar Pro", "One", "Privately Built", "GEPRC", 
+          "GENERAL AERONAUTICS", "Xianning Tyi Model Technology", 
+          "EFT Electronic Technology", "Rollei", "XAG", "Potensic", "JOYANCE", 
+          "M-Drone", "BROUAV", "Patikuin"
+        ],
+        
+        allCountries: [
+          { name: "Afghanistan", iso2: "AF" }, { name: "Albania", iso2: "AL" }, { name: "Algeria", iso2: "DZ" },
+          { name: "Argentina", iso2: "AR" }, { name: "Australia", iso2: "AU" }, { name: "Austria", iso2: "AT" },
+          { name: "Bangladesh", iso2: "BD" }, { name: "Belgium", iso2: "BE" }, { name: "Brazil", iso2: "BR" },
+          { name: "Canada", iso2: "CA" }, { name: "Chile", iso2: "CL" }, { name: "China", iso2: "CN" },
+          { name: "Colombia", iso2: "CO" }, { name: "Czech Republic", iso2: "CZ" }, { name: "Denmark", iso2: "DK" },
+          { name: "Egypt", iso2: "EG" }, { name: "Finland", iso2: "FI" }, { name: "France", iso2: "FR" },
+          { name: "Germany", iso2: "DE" }, { name: "Greece", iso2: "GR" }, { name: "Hong Kong", iso2: "HK" },
+          { name: "Hungary", iso2: "HU" }, { name: "India", iso2: "IN" }, { name: "Indonesia", iso2: "ID" },
+          { name: "Iran", iso2: "IR" }, { name: "Iraq", iso2: "IQ" }, { name: "Ireland", iso2: "IE" },
+          { name: "Israel", iso2: "IL" }, { name: "Italy", iso2: "IT" }, { name: "Japan", iso2: "JP" },
+          { name: "Kenya", iso2: "KE" }, { name: "Kuwait", iso2: "KW" }, { name: "Malaysia", iso2: "MY" },
+          { name: "Maldives", iso2: "MV" }, { name: "Mexico", iso2: "MX" }, { name: "Nepal", iso2: "NP" },
+          { name: "Netherlands", iso2: "NL" }, { name: "New Zealand", iso2: "NZ" }, { name: "Nigeria", iso2: "NG" },
+          { name: "Norway", iso2: "NO" }, { name: "Oman", iso2: "OM" }, { name: "Pakistan", iso2: "PK" },
+          { name: "Philippines", iso2: "PH" }, { name: "Poland", iso2: "PL" }, { name: "Portugal", iso2: "PT" },
+          { name: "Qatar", iso2: "QA" }, { name: "Romania", iso2: "RO" }, { name: "Russia", iso2: "RU" },
+          { name: "Saudi Arabia", iso2: "SA" }, { name: "Singapore", iso2: "SG" }, { name: "South Africa", iso2: "ZA" },
+          { name: "South Korea", iso2: "KR" }, { name: "Spain", iso2: "ES" }, { name: "Sri Lanka", iso2: "LK" },
+          { name: "Sweden", iso2: "SE" }, { name: "Switzerland", iso2: "CH" }, { name: "Taiwan", iso2: "TW" },
+          { name: "Thailand", iso2: "TH" }, { name: "Turkey", iso2: "TR" }, { name: "Ukraine", iso2: "UA" },
+          { name: "United Arab Emirates", iso2: "AE" }, { name: "United Kingdom", iso2: "GB" }, { name: "United States", iso2: "US" },
+          { name: "Vietnam", iso2: "VN" }
+        ],
+        
+        allStates: {
+          "LK": [
+            { name: "Central Province", iso2: "2", country_code: "LK" },
+            { name: "Eastern Province", iso2: "5", country_code: "LK" },
+            { name: "North Central Province", iso2: "7", country_code: "LK" },
+            { name: "North Western Province", iso2: "6", country_code: "LK" },
+            { name: "Northern Province", iso2: "4", country_code: "LK" },
+            { name: "Sabaragamuwa Province", iso2: "9", country_code: "LK" },
+            { name: "Southern Province", iso2: "3", country_code: "LK" },
+            { name: "Uva Province", iso2: "8", country_code: "LK" },
+            { name: "Western Province", iso2: "1", country_code: "LK" }
+          ],
+          "IN": [
+            { name: "Andhra Pradesh", iso2: "AP", country_code: "IN" },
+            { name: "Delhi", iso2: "DL", country_code: "IN" },
+            { name: "Gujarat", iso2: "GJ", country_code: "IN" },
+            { name: "Karnataka", iso2: "KA", country_code: "IN" },
+            { name: "Kerala", iso2: "KL", country_code: "IN" },
+            { name: "Maharashtra", iso2: "MH", country_code: "IN" },
+            { name: "Tamil Nadu", iso2: "TN", country_code: "IN" },
+            { name: "Telangana", iso2: "TG", country_code: "IN" },
+            { name: "Uttar Pradesh", iso2: "UP", country_code: "IN" },
+            { name: "West Bengal", iso2: "WB", country_code: "IN" }
+          ],
+          "US": [
+            { name: "California", iso2: "CA", country_code: "US" },
+            { name: "Florida", iso2: "FL", country_code: "US" },
+            { name: "Georgia", iso2: "GA", country_code: "US" },
+            { name: "Illinois", iso2: "IL", country_code: "US" },
+            { name: "New York", iso2: "NY", country_code: "US" },
+            { name: "Ohio", iso2: "OH", country_code: "US" },
+            { name: "Pennsylvania", iso2: "PA", country_code: "US" },
+            { name: "Texas", iso2: "TX", country_code: "US" },
+            { name: "Virginia", iso2: "VA", country_code: "US" },
+            { name: "Washington", iso2: "WA", country_code: "US" }
+          ],
+          "GB": [
+            { name: "England", iso2: "ENG", country_code: "GB" },
+            { name: "Northern Ireland", iso2: "NIR", country_code: "GB" },
+            { name: "Scotland", iso2: "SCT", country_code: "GB" },
+            { name: "Wales", iso2: "WLS", country_code: "GB" }
+          ],
+          "AU": [
+            { name: "Australian Capital Territory", iso2: "ACT", country_code: "AU" },
+            { name: "New South Wales", iso2: "NSW", country_code: "AU" },
+            { name: "Northern Territory", iso2: "NT", country_code: "AU" },
+            { name: "Queensland", iso2: "QLD", country_code: "AU" },
+            { name: "South Australia", iso2: "SA", country_code: "AU" },
+            { name: "Tasmania", iso2: "TAS", country_code: "AU" },
+            { name: "Victoria", iso2: "VIC", country_code: "AU" },
+            { name: "Western Australia", iso2: "WA", country_code: "AU" }
+          ]
+        },
+        
+        allCities: {
+          "LK": {
+            "1": [ 
+              { id: 1, name: "Colombo" }, { id: 2, name: "Dehiwala-Mount Lavinia" }, { id: 3, name: "Moratuwa" },
+              { id: 4, name: "Negombo" }, { id: 5, name: "Sri Jayawardenepura Kotte" }, { id: 6, name: "Kalutara" },
+              { id: 7, name: "Kelaniya" }, { id: 8, name: "Kolonnawa" }, { id: 9, name: "Wattala" },
+              { id: 10, name: "Maharagama" }, { id: 11, name: "Panadura" }, { id: 12, name: "Ratmalana" },
+              { id: 13, name: "Battaramulla" }, { id: 14, name: "Nugegoda" }, { id: 15, name: "Homagama" },
+              { id: 16, name: "Gampaha" }, { id: 17, name: "Ja-Ela" }, { id: 18, name: "Kadawatha" },
+              { id: 19, name: "Malabe" }, { id: 20, name: "Boralesgamuwa" }, { id: 21, name: "Piliyandala" },
+              { id: 22, name: "Minuwangoda" }, { id: 23, name: "Beruwala" }, { id: 24, name: "Ragama" }
+            ],
+            "2": [ 
+              { id: 25, name: "Kandy" }, { id: 26, name: "Matale" }, { id: 27, name: "Nuwara Eliya" },
+              { id: 28, name: "Peradeniya" }, { id: 29, name: "Gampola" }, { id: 30, name: "Nawalapitiya" },
+              { id: 31, name: "Dambulla" }, { id: 32, name: "Hatton" }, { id: 33, name: "Kadugannawa" }
+            ],
+            "3": [ 
+              { id: 34, name: "Galle" }, { id: 35, name: "Matara" }, { id: 36, name: "Hambantota" },
+              { id: 37, name: "Ambalangoda" }, { id: 38, name: "Weligama" }, { id: 39, name: "Tangalle" },
+              { id: 40, name: "Hikkaduwa" }, { id: 41, name: "Unawatuna" }, { id: 42, name: "Mirissa" }
+            ],
+            "4": [ 
+              { id: 43, name: "Jaffna" }, { id: 44, name: "Kilinochchi" }, { id: 45, name: "Mannar" },
+              { id: 46, name: "Mullaitivu" }, { id: 47, name: "Vavuniya" }, { id: 48, name: "Point Pedro" }
+            ],
+            "5": [ 
+              { id: 49, name: "Batticaloa" }, { id: 50, name: "Trincomalee" }, { id: 51, name: "Ampara" },
+              { id: 52, name: "Kalmunai" }, { id: 53, name: "Akkaraipattu" }, { id: 54, name: "Kattankudy" }
+            ],
+            "6": [ 
+              { id: 55, name: "Kurunegala" }, { id: 56, name: "Puttalam" }, { id: 57, name: "Chilaw" },
+              { id: 58, name: "Kuliyapitiya" }, { id: 59, name: "Wennappuwa" }, { id: 60, name: "Anamaduwa" }
+            ],
+            "7": [ 
+              { id: 61, name: "Anuradhapura" }, { id: 62, name: "Polonnaruwa" }, { id: 63, name: "Mihintale" },
+              { id: 64, name: "Medawachchiya" }, { id: 65, name: "Kekirawa" }
+            ],
+            "8": [ 
+              { id: 66, name: "Badulla" }, { id: 67, name: "Bandarawela" }, { id: 68, name: "Monaragala" },
+              { id: 69, name: "Haputale" }, { id: 70, name: "Welimada" }, { id: 71, name: "Ella" }
+            ],
+            "9": [ 
+              { id: 72, name: "Ratnapura" }, { id: 73, name: "Kegalle" }, { id: 74, name: "Balangoda" },
+              { id: 75, name: "Embilipitiya" }, { id: 76, name: "Eheliyagoda" }, { id: 77, name: "Mawanella" }
+            ]
+          },
+          "IN": {
+            "AP": [{ id: 101, name: "Visakhapatnam" }, { id: 102, name: "Vijayawada" }, { id: 103, name: "Guntur" }, { id: 104, name: "Tirupati" }],
+            "DL": [{ id: 105, name: "New Delhi" }, { id: 106, name: "Delhi" }],
+            "GJ": [{ id: 107, name: "Ahmedabad" }, { id: 108, name: "Surat" }, { id: 109, name: "Vadodara" }, { id: 110, name: "Rajkot" }],
+            "KA": [{ id: 111, name: "Bangalore" }, { id: 112, name: "Mysore" }, { id: 113, name: "Mangalore" }, { id: 114, name: "Hubli" }],
+            "KL": [{ id: 115, name: "Thiruvananthapuram" }, { id: 116, name: "Kochi" }, { id: 117, name: "Kozhikode" }, { id: 118, name: "Thrissur" }],
+            "MH": [{ id: 119, name: "Mumbai" }, { id: 120, name: "Pune" }, { id: 121, name: "Nagpur" }, { id: 122, name: "Nashik" }],
+            "TN": [{ id: 123, name: "Chennai" }, { id: 124, name: "Coimbatore" }, { id: 125, name: "Madurai" }, { id: 126, name: "Salem" }],
+            "TG": [{ id: 127, name: "Hyderabad" }, { id: 128, name: "Warangal" }, { id: 129, name: "Nizamabad" }],
+            "UP": [{ id: 130, name: "Lucknow" }, { id: 131, name: "Kanpur" }, { id: 132, name: "Agra" }, { id: 133, name: "Varanasi" }],
+            "WB": [{ id: 134, name: "Kolkata" }, { id: 135, name: "Howrah" }, { id: 136, name: "Durgapur" }, { id: 137, name: "Siliguri" }]
+          },
+          "US": {
+            "CA": [{ id: 201, name: "Los Angeles" }, { id: 202, name: "San Francisco" }, { id: 203, name: "San Diego" }, { id: 204, name: "San Jose" }],
+            "FL": [{ id: 205, name: "Miami" }, { id: 206, name: "Orlando" }, { id: 207, name: "Tampa" }, { id: 208, name: "Jacksonville" }],
+            "GA": [{ id: 209, name: "Atlanta" }, { id: 210, name: "Augusta" }, { id: 211, name: "Savannah" }],
+            "IL": [{ id: 212, name: "Chicago" }, { id: 213, name: "Aurora" }, { id: 214, name: "Naperville" }],
+            "NY": [{ id: 215, name: "New York City" }, { id: 216, name: "Buffalo" }, { id: 217, name: "Rochester" }, { id: 218, name: "Albany" }],
+            "OH": [{ id: 219, name: "Columbus" }, { id: 220, name: "Cleveland" }, { id: 221, name: "Cincinnati" }],
+            "PA": [{ id: 222, name: "Philadelphia" }, { id: 223, name: "Pittsburgh" }, { id: 224, name: "Allentown" }],
+            "TX": [{ id: 225, name: "Houston" }, { id: 226, name: "San Antonio" }, { id: 227, name: "Dallas" }, { id: 228, name: "Austin" }],
+            "VA": [{ id: 229, name: "Virginia Beach" }, { id: 230, name: "Norfolk" }, { id: 231, name: "Richmond" }],
+            "WA": [{ id: 232, name: "Seattle" }, { id: 233, name: "Spokane" }, { id: 234, name: "Tacoma" }]
+          },
+          "GB": {
+            "ENG": [{ id: 301, name: "London" }, { id: 302, name: "Birmingham" }, { id: 303, name: "Manchester" }, { id: 304, name: "Liverpool" }, { id: 305, name: "Leeds" }],
+            "SCT": [{ id: 306, name: "Edinburgh" }, { id: 307, name: "Glasgow" }, { id: 308, name: "Aberdeen" }],
+            "WLS": [{ id: 309, name: "Cardiff" }, { id: 310, name: "Swansea" }, { id: 311, name: "Newport" }],
+            "NIR": [{ id: 312, name: "Belfast" }, { id: 313, name: "Londonderry" }]
+          },
+          "AU": {
+            "NSW": [{ id: 401, name: "Sydney" }, { id: 402, name: "Newcastle" }, { id: 403, name: "Wollongong" }],
+            "VIC": [{ id: 404, name: "Melbourne" }, { id: 405, name: "Geelong" }, { id: 406, name: "Ballarat" }],
+            "QLD": [{ id: 407, name: "Brisbane" }, { id: 408, name: "Gold Coast" }, { id: 409, name: "Cairns" }],
+            "WA": [{ id: 410, name: "Perth" }, { id: 411, name: "Fremantle" }],
+            "SA": [{ id: 412, name: "Adelaide" }, { id: 413, name: "Mount Gambier" }],
+            "TAS": [{ id: 414, name: "Hobart" }, { id: 415, name: "Launceston" }],
+            "ACT": [{ id: 416, name: "Canberra" }],
+            "NT": [{ id: 417, name: "Darwin" }, { id: 418, name: "Alice Springs" }]
+          }
+        },
+        
+        init() {
+          this.countries = [...this.allCountries];
+          this.filteredCountries = [...this.countries];
+          this.filteredBrands = [...this.droneBrands];
+        },
+        
+        loadStates(countryCode) {
+          this.states = this.allStates[countryCode] || [];
+          this.filteredStates = [...this.states];
+        },
+        
+        loadCities(countryCode, stateCode) {
+          const countryCities = this.allCities[countryCode] || {};
+          this.cities = countryCities[stateCode] || [];
+          this.filteredCities = [...this.cities];
+        },
+        
+        filterCountries() {
+          const search = this.countrySearch.toLowerCase();
+          this.filteredCountries = this.countries.filter(country => 
+            country.name.toLowerCase().includes(search)
+          ).slice(0, 50);
+        },
+        
+        filterStates() {
+          const search = this.stateSearch.toLowerCase();
+          this.filteredStates = this.states.filter(state => 
+            state.name.toLowerCase().includes(search)
+          ).slice(0, 50);
+        },
+        
+        filterCities() {
+          const search = this.citySearch.toLowerCase();
+          this.filteredCities = this.cities.filter(city => 
+            city.name.toLowerCase().includes(search)
+          ).slice(0, 50);
+        },
+        
+        filterBrands() {
+          const search = this.brandSearch.toLowerCase();
+          this.filteredBrands = this.droneBrands.filter(brand => 
+            brand.toLowerCase().includes(search)
+          );
+        },
+        
+        selectCountry(country) {
+          this.formData.country = country.name;
+          this.formData.countryCode = country.iso2;
+          this.countrySearch = country.name;
+          this.showCountryDropdown = false;
+          
+          this.formData.state = '';
+          this.formData.stateCode = '';
+          this.formData.city = '';
+          this.stateSearch = '';
+          this.citySearch = '';
+          this.states = [];
+          this.cities = [];
+          
+          this.loadStates(country.iso2);
+        },
+        
+        selectState(state) {
+          this.formData.state = state.name;
+          this.formData.stateCode = state.iso2;
+          this.stateSearch = state.name;
+          this.showStateDropdown = false;
+          
+          this.formData.city = '';
+          this.citySearch = '';
+          this.cities = [];
+          
+          this.loadCities(this.formData.countryCode, state.iso2);
+        },
+        
+        selectCity(city) {
+          this.formData.city = city.name;
+          this.citySearch = city.name;
+          this.showCityDropdown = false;
+        },
+        
+        selectBrand(brand) {
+          this.formData.droneBrand = brand;
+          this.brandSearch = brand;
+          this.showBrandDropdown = false;
+        },
+        
+        async submitForm() {
+          this.isSubmitting = true;
+          this.submitSuccess = false;
+          this.submitError = '';
+          
+          try {
+            const googleScriptUrl = 'https://script.google.com/macros/s/AKfycbwuhbjXy2sSuPpUFD0sAeuj0Qe8f26bHMwd1KQilMp1f1KTj0LH5MevYCyQKGfbWGSKfg/exec';
+            
+            const params = new URLSearchParams();
+            params.append('fullName', this.formData.fullName);
+            params.append('nationalId', this.formData.nationalId);
+            params.append('country', this.formData.country);
+            params.append('state', this.formData.state);
+            params.append('city', this.formData.city);
+            params.append('suburb', this.formData.suburb);
+            params.append('streetName', this.formData.streetName);
+            params.append('zipCode', this.formData.zipCode);
+            params.append('addressNumber', this.formData.addressNumber);
+            params.append('contactNo', this.formData.contactNo);
+            params.append('emergencyNo', this.formData.emergencyNo);
+            params.append('email', this.formData.email);
+            params.append('droneBrand', this.formData.droneBrand);
+            params.append('model', this.formData.model);
+            params.append('serialNo', this.formData.serialNo);
+            params.append('operation', this.formData.operation);
+            params.append('purpose', this.formData.purpose);
+            params.append('purposeDescription', this.formData.purposeDescription);
+            params.append('adminStatus', this.formData.adminStatus);
+            
+            await fetch(googleScriptUrl, {
+              method: 'POST',
+              mode: 'no-cors',
+              headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+              },
+              body: params.toString()
+            });
+            
+            this.submitSuccess = true;
+            this.resetForm();
+            
+          } catch (error) {
+            console.error('Submission error:', error);
+            this.submitError = 'Failed to submit registration. Please try again.';
+          } finally {
+            this.isSubmitting = false;
+          }
+        },
+        
+        resetForm() {
+          this.formData = {
+            fullName: '',
+            nationalId: '',
+            country: '',
+            countryCode: '',
+            state: '',
+            stateCode: '',
+            city: '',
+            suburb: '',
+            streetName: '',
+            zipCode: '',
+            addressNumber: '',
+            contactNo: '',
+            emergencyNo: '',
+            email: '',
+            droneBrand: '',
+            model: '',
+            serialNo: '',
+            operation: '',
+            purpose: '',
+            purposeDescription: '',
+            adminStatus: 'Pending'
+          };
+          this.countrySearch = '';
+          this.stateSearch = '';
+          this.citySearch = '';
+          this.brandSearch = '';
+        }
+      }
+    }
+  </script>
+</body>
+</html>
